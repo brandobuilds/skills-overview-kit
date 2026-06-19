@@ -64,6 +64,8 @@ const ctx = {
   DOMAIN: site.domain || '',
   YEAR: String(new Date().getFullYear()),
 };
+// Nav/footer pill: a version when there is one, else a skill count (version-less sites).
+ctx.NAVPILL = site.navPill || ctx.VERSION_PILL || (ctx.COUNT ? `${ctx.COUNT} skills` : '');
 const subst = (s) => s.replace(/\{\{([A-Z0-9_]+)\}\}/g, (m, k) => (k in ctx ? ctx[k] : m));
 
 /* ---------- <style>: theme.css + brand overrides ---------- */
@@ -103,7 +105,7 @@ function navComponent() {
     <div class="nav-links">
       ${links}
     </div>
-    <span class="pill-ver"><!--VER-->${esc(ctx.VERSION_PILL)}<!--/VER--></span>
+    <span class="pill-ver"><!--VER-->${esc(ctx.NAVPILL)}<!--/VER--></span>
     ${toggle}
   </div>
 </nav>`;
@@ -156,7 +158,7 @@ function footerComponent() {
   <div class="wrap">
     <div class="big grad">${esc(site.footerBig || 'Skills, as a system.')}</div>
     <p>${site.footerNote || ''}</p>
-    <div class="meta">${esc(ctx.NAME)} <!--VER-->${esc(ctx.VERSION_PILL)}<!--/VER--> · ${esc(site.license || 'MIT')} · <a href="${esc(ctx.REPO_URL)}" target="_blank" rel="noopener">${esc(ctx.REPO_LABEL)}</a></div>
+    <div class="meta">${esc(ctx.NAME)}${ctx.VERSION_PILL ? ` <!--VER-->${esc(ctx.VERSION_PILL)}<!--/VER-->` : ''} · ${esc(site.license || 'MIT')} · <a href="${esc(ctx.REPO_URL)}" target="_blank" rel="noopener">${esc(ctx.REPO_LABEL)}</a></div>
     <div class="meta" style="margin-top:8px;opacity:.85">Updated <!--UPD-->${esc(ctx.UPDATED)}<!--/UPD--> · Checked <!--CHK-->${esc(ctx.CHECKED)}<!--/CHK-->${site.autoNote ? ' · ' + esc(site.autoNote) : ''}</div>
   </div>
 </footer>`;

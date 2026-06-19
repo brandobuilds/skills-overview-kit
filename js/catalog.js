@@ -79,8 +79,10 @@
   function cardHTML(s, color) {
     var fresh = isFresh(s.u);
     var lib = SHOW_LIB && s.lib && LIBS[s.lib];
-    var href = s.repo || '#';
-    return '<a class="skcard" href="' + esc(href) + '" target="_blank" rel="noopener" style="--cc:' + color + (lib ? ';--lc:' + lib.color : '') + '" ' +
+    var hasLink = !!s.repo;
+    var tag = hasLink ? 'a' : 'div';
+    var attrs = hasLink ? ' href="' + esc(s.repo) + '" target="_blank" rel="noopener"' : '';
+    return '<' + tag + ' class="skcard" ' + attrs + ' style="--cc:' + color + (lib ? ';--lc:' + lib.color : '') + '" ' +
       'data-name="' + esc(s.name) + '" data-d="' + esc((s.d || '').toLowerCase()) + '" data-cat="' + esc(s.cat || 'more') + '">' +
       (fresh ? '<span class="new-tag">UPDATED</span>' : '') +
       '<div class="top"><span class="nm">' + esc(s.name) + '</span>' +
@@ -88,7 +90,7 @@
       '<p>' + esc(s.d || '') + '</p>' +
       (s.u ? '<div class="upd">Updated ' + fmtDate(s.u) + '</div>' : '') +
       (lib ? '<div class="lib"><i></i>' + esc(lib.name) + '</div>' : '') +
-      '</a>';
+      '</' + tag + '>';
   }
 
   /* ---- render search + filters + catalog ---- */

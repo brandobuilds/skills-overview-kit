@@ -85,10 +85,23 @@ function styleBlock() {
   return `<style>\n${theme}\n${ov ? `:root{${ov}}` : ''}${ovLight}\n</style>`;
 }
 
+/* ---------- favicon: brand accent + mark, inlined as a data URI ---------- */
+function faviconLink() {
+  const accent = (site.brand && site.brand.accent) || '#6ea8ff';
+  const mark = ctx.BRANDMARK || '◆';
+  const fs = mark.length <= 1 ? 18 : mark.length === 2 ? 14 : 11;
+  const y = Math.round(16 + fs * 0.34);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="${accent}"/>` +
+    `<text x="16" y="${y}" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="${fs}" font-weight="800" text-anchor="middle" fill="#0a0e16">${esc(mark)}</text></svg>`;
+  const b64 = Buffer.from(svg, 'utf8').toString('base64');
+  return `<link rel="icon" href="data:image/svg+xml;base64,${b64}">`;
+}
+
 /* ---------- no-flash theme boot ---------- */
 function headTheme() {
   return `<script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');` +
-    `(function(){try{var t=localStorage.getItem('skills-theme');if(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)t='light';if(t==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>`;
+    `(function(){try{var t=localStorage.getItem('skills-theme');if(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)t='light';if(t==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>` +
+    faviconLink();
 }
 
 /* ---------- nav ---------- */
